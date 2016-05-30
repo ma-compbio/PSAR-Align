@@ -1,0 +1,532 @@
+
+<HTML>
+  <HEAD>
+
+    <link rel = "stylesheet" href = "pretty.css" type = "text/css"> 
+
+    <TITLE>FSA Frequently Asked Questions</TITLE>
+    <META NAME="version" content="0.9" />
+    <META NAME="keywords" CONTENT="FSA, fast statistical alignment, multiple sequence alignment, statistical alignment, bioinformatics, sequence annealing">
+    <META NAME="description" CONTENT="FSA Frequently Asked Questions">
+    <META NAME="ROBOTS" CONTENT="ALL">
+    <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+    <!-- ImageReady Preload Script (faq.tif) -->
+  </HEAD>
+
+
+  <BODY BGCOLOR=#FFFFFF ONLOAD="preloadImages();">
+
+    <h1><a href="http://fsa.sourceforge.net/index.html">FSA</a> Frequently Asked Questions</h1>
+
+    <h2>Introduction</h2>
+    <ul>
+      <li><a href = "#intro">What is FSA?</a></li>
+      <li><a href = "#acronym">What does FSA stand for?</a></li>
+      <li><a href = "#install"> How do I download and install FSA?</a></li>
+      <li><a href = "#runfsa">How do I run FSA?</a></li>
+      <li><a href = "#server">Is there a webserver for FSA?</a></li>
+      <li><a href = "#help"> How do I get a help message to explain the options?</a></li>
+    </ul>
+
+    <h2>Alignments</h2>
+    <ul>
+      <li><a href = "#manyseqs"> How do I align many sequences?</a></li>
+      <li><a href = "#longseqs"> How do I align long sequences?</a></li>
+      <li><a href = "#genomes"> How do I align genomes?</a></li>
+      <li><a href = "#manygaps">Why are there so many gaps in my alignment?</a></li>
+      <li><a href = "#gapfactor">How do I control the sensitivity/specificity tradeoff of my alignment?</a></li>
+    </ul>
+
+    <h2>Visualization</h2>
+    <ul>
+      <li><a href="#gui">How do I visualize the alignments produced by FSA?</a></li>
+      <li><a href = "#reliable">How do I see what parts of my alignment are the most reliable?</a></li>
+    </ul>
+
+    <h2>Output formats and tools</h2>
+    <ul>
+      <li><a href = "#stockholm"> How do I parse Stockholm alignments?</a></li>
+      <li><a href = "#comparealign"> How do I compare alignments?</a></li>
+    </ul>
+
+    <h2>Troubleshooting</h2>
+    <ul>
+      <li> <a href = "#logging"> My alignment is taking a long time.  How do I see what FSA is doing?</a>
+      <li> <a href = "#gui_memory">I'm getting memory errors when using the GUI.</a>
+      <li> <a href = "#malloc">I get out-of-memory (bad alloc) errors when I try to align long sequences.</a>
+    </ul>
+
+    <h2>More information</h2>
+    <ul>
+      <li><a href = "#contact"> How do I contact you?</a></li>
+      <li><a href = "#citation"> How do I cite FSA?</a></li>
+      <li><a href = "#license"> Under what license is FSA distributed?</a></li>
+      <li><a href = "#git"> How do I become an FSA developer?</a></li>
+      <li><a href = "#influences"> What other programs influenced the development of FSA?</a></li>
+    </ul>
+
+
+    <!-- Introduction -->
+    <hr>
+    <h2>Introduction</h2>
+
+    <h4><a name = "intro">What is FSA?</a></h4>
+
+    FSA is a probabilistic multiple sequence alignment algorithm which uses
+    a "distance-based" approach to aligning homologous protein, RNA or DNA
+    sequences.  Much as distance-based phylogenetic reconstruction methods
+    like Neighbor-Joining build a phylogeny using only pairwise divergence
+    estimates, FSA builds a multiple alignment using only pairwise
+    estimations of homology.  This is made possible by the sequence
+    annealing technique for constructing a multiple alignment from pairwise
+    comparisons, developed by Ariel Schwartz in
+    <a href="http://www.eecs.berkeley.edu/Pubs/TechRpts/2007/EECS-2007-39.html">
+    "Posterior Decoding Methods for Optimization and Control of Multiple
+    Alignments</a>."
+
+    <p>
+      FSA brings the high accuracies previously available only for small-scale analyses of proteins or RNAs
+      to large-scale problems such as aligning thousands of sequences or megabase-long sequences.
+      FSA introduces several novel methods for constructing better alignments:
+      <ul>
+	<li type=square>
+	  FSA uses machine-learning techniques to estimate gap and
+	  substitution parameters on the fly for each set of input sequences.
+	  This "query-specific learning" alignment method makes FSA very robust: it
+	  can produce superior alignments of sets of homologous sequences
+	  which are subject to very different evolutionary constraints.
+	<li type=square>
+	  FSA is capable of aligning hundreds or even thousands of sequences
+	  using a randomized inference algorithm to reduce the computational
+	  cost of multiple alignment.  This randomized inference can be over
+	  ten times faster than a direct approach with little loss of
+	  accuracy.
+	<li type=square>
+	  FSA can quickly align very long sequences using the "anchor
+	  annealing" technique for resolving anchors and projecting them with
+	  transitive anchoring.  It then stitches together the alignment
+	  between the anchors using the methods described above.
+	<li type=square>
+	  The included GUI, MAD (Multiple Alignment Display), can display
+	  the intermediate alignments produced by FSA, where each character
+	  is colored according to the probability that it is correctly
+	  aligned.
+      </ul>
+
+
+
+      <h4><a name = "acronym">What does FSA stand for?</a></h4>
+      Fast statistical alignment: We use machine-learning techniques to quickly
+      re-estimate parameters for each alignment problem.
+    <p>
+      Fast sequence annealing: We build a multiple alignment from pairwise comparisons
+      with the sequence annealing technique.
+    <p>
+      Functional statistical alignment: We implicitly use functional information when
+      constructing alignments.
+    <p>
+      <a href="http://www.fullspeedahead.com/">Full Speed Ahead</a><p>
+    <p>
+      ...and more...
+
+
+
+      <h4><a name = "install">How do I download and install FSA?</a></h4>
+      FSA is hosted by <a href="http://sourceforge.net">SourceForge</a>.
+      You can download the latest version from the <a href="http://sourceforge.net/projects/fsa/">SourceForge project page</a>.
+    <p>
+
+      FSA is built and installed by running the following commands: <br>
+    <p><kbd>
+       tar xvzf fsa-X.X.X.tar.gz <br>
+       cd fsa-X.X.X <br>
+       ./configure <br>
+       make <br>
+       make install <br>
+      </kbd>
+
+    <p>
+      (Substitute <var>fsa-X.X.X.tar.gz</var> with the name of the file
+      that you downloaded.)
+
+    <p>
+      The FSA executables can then be found in your system's standard
+      binary directory (e.g., /usr/local/bin).  Alternatively, you may
+      just run FSA from the src/main subdirectory in which it is built
+      (which does not require running the <kbd>make install</kbd> step).
+      If you wish to install the FSA binaries in a location other than
+      your system's standard directories (which usually requires root
+      permissions), specify the top-level installation directory with
+      the <kbd>--prefix</kbd> option to configure.  For example,
+    <p><kbd>./configure --prefix=$HOME</kbd>
+    <p>
+      specifies that binaries should be installed in <var>$HOME/bin</var>, libraries in
+      <var>$HOME/lib</var>, etc. <br>
+    <p>
+      If you wish to align long sequences, then you must download and install <a href="http://mummer.sourceforge.net/">MUMmer</a>,
+      which FSA calls to get candidate anchors between sequences.
+      When running <kbd>./configure</kbd>, either have the MUMmer executable in your path
+      or specify the executable with the <kbd>--with-mummer</kbd> option to <kbd>./configure</kbd>.
+
+    <p>
+      FSA can also call <a href="http://www.ebi.ac.uk/~guy/exonerate/">exonerate</a>
+      to obtain anchors.  If you wish to use exonerate, then as with MUMmer,
+      when running <kbd>./configure</kbd>, you must either have the exonerate executable in your path
+      or specify the executable with the <kbd>--with-exonerate</kbd> option to <kbd>./configure</kbd>.
+
+    <p>
+      See the <var>README</var> file and <a href = "#longseqs">How do I align long sequences?</a>
+      for more information.
+    <p>
+      Please contact us if you have any build problems.
+
+
+
+      <h4><a name = "runfsa"> How do I run FSA?</a></h4>
+      FSA accepts FASTA-format input files and outputs multi-FASTA
+      alignments by default.  The most basic usage is:
+    <p><kbd>fsa &lt;mysequences.fa&gt; &gt;myalignedsequences.mfa</kbd>
+    <p>
+      or
+    <p><kbd>fsa --stockholm &lt;mysequences.fa&gt; &gt;myalignedsequences.stk</kbd>
+    <p>
+
+
+      <h4><a name = "server"> Is there a webserver for FSA?</a></h4>
+      There is a webserver hosted <a href="http://orangutan.math.berkeley.edu/fsa/">here</a>
+      which you can submit alignment jobs to.
+      You will be emailed when the alignment is completed.
+
+
+
+      <h4><a name = "help"> How do I get a help message to explain the options?</a></h4>
+      Run
+    <p><kbd>fsa --help</kbd>
+
+
+
+      <h4><a name = "example_files"> Are there example sequence files and alignments?</a></h4>
+      Yes.  Please see the <var>examples/</var> directory.
+
+
+
+      <!-- Alignments -->
+      <hr>
+      <h2>Alignments</h2>
+
+      <h4><a name = "manyseqs"> How do I align many sequences?</a></h4>
+      FSA can align thousands or tens of thousands of sequences.
+      Try running FSA with the <kbd>--fast</kbd> option.  You can get finer-grained control with
+      the <kbd>--alignment-number &lt;int&gt;</kbd> option, which controls the total number of pairwise
+      comparisons which FSA uses to build a multiple alignment.  If you want to align
+      N sequences, then you can set <kbd>--alignment-number</kbd> to as low as (N - 1) or as
+      high as (N choose 2) == (N * (N - 1) / 2).
+
+
+
+
+      <h4><a name = "longseqs"> How do I align long sequences?</a></h4>
+      FSA can align long sequences (megabases or tens of megabases) with the
+      "anchor annealing" technique.  It uses the program MUMmer to find maximal
+      unique matches between pairs of sequences to be aligned, resolves 
+      inconsistencies with anchor annealing, and then pieces together the alignment
+      between anchored regions using its standard inference method.
+
+    <p>
+      FSA can also use the program exonerate to detect remote homology.
+
+    <p>
+      Please use the <kbd>--with-mummer</kbd> and <kbd>--with-exonerate</kbd> options to <kbd>./configure</kbd>
+      before compilation as explained in <a href="#runfsa">How do I run FSA?</a>.
+
+    <p>
+      You can read about the MUMmer and exonerate programs in:
+    <p>
+      S. Kurtz, A. Phillippy, A.L. Delcher, M. Smoot, M. Shumway, C. Antonescu, and S.L. Salzberg.
+      <a href="http://genomebiology.com/2004/5/2/R12">Versatile and open software for comparing large genomes</a>. Genome Biology. 2004, 5:R12.
+    <p>
+      G. S. Slater and E. Birney.
+      <a href="http://www.biomedcentral.com/1471-2105/6/31">Automated generation of heuristics for biological sequence comparison</a>. BMC Bioinformatics. 2005, 6:31.
+
+
+
+      <h4><a name = "genomes"> How do I align genomes?</a></h4>
+      If the genomes which you want to align have few rearrangements, then
+      you can run FSA directly on them.  If they have rearrangments, then 
+      you must first use a program such as Colin Dewey's <a href="http://www.biostat.wisc.edu/~cdewey/mercator/">Mercator</a>
+      to construct a homology map for the genomes and then run FSA on the
+      homologous segments.  FSA can directly use the constraint information
+      produced by Mercator to inform its multiple alignment
+      (use the <kbd>--mercator</kbd> option to specify the Mercator constraint file).
+
+    <p>
+      You can read about Mercator in:
+
+    <p>
+      C. Dewey. <a href="http://www.eecs.berkeley.edu/Pubs/TechRpts/2006/EECS-2006-104.html">Whole-genome alignments and polytopes for comparative genomics</a>.
+      Ph.D. thesis, University of California, Berkeley. 2006.
+
+
+      <h4><a name = "logging"> My alignment is taking a long time.  How do I see what FSA is doing?</a></h4>
+
+      FSA has an extensive logging system.  Try running with the <kbd>--log 7</kbd> option
+      to see progress of the DP algorithm, and <kbd>--log 6</kbd> to see progress of anchoring
+      (when aligning long sequences).
+      Log levels from 0 to 10 are permitted,
+      where lower numbers are more verbose.
+
+
+      <h4><a name = "manygaps">Why are there so many gaps in my alignment?</a></h4>
+
+      Most alignment programs attempt to maximize sensitivity, even at
+      the expense of specificity, leading to over-alignment (alignment of
+      non-homologous sequence).  FSA, in contrast, maximizes the expected
+      accuracy of the alignment with a measure which rewards sensitivity
+      but penalizes over-alignment.  If FSA cannot reliably detect homology,
+      then it will leave characters unaligned (gapped).
+
+
+      <h4><a name = "gapfactor">How do I control the sensitivity/specificity tradeoff of my alignment?</a></h4>
+
+      By default FSA stops aligning characters when the probability that
+      a character is aligned is equal to the probability that it is gapped.
+      Use the <kbd>--maxsn</kbd> option for maximum sensitivity.
+
+    <p>
+      You can get finer-grained control with the <kbd>--gapfactor &lt;int&gt;</kbd> option.
+      By default FSA runs at <kbd>--gapfactor 1</kbd>.
+      Use <kbd>--gapfactor 0</kbd> for highest sensitivity (this is equivalent to <kbd>--maxsn</kbd>)
+      and gap factors > 1 for higher specificity.
+
+
+
+      <!-- Visualization -->
+      <hr>
+      <h2>Visualization</h2>
+
+      <h4><a name = "gui"> How do I visualize the alignments produced by FSA?</a></h4>
+      Run FSA with the command-line option <kbd>--gui</kbd>.  If the input alignment file
+      is <var>myseqs.fasta</var>, then FSA will write the files <var>myseqs.fasta.gui</var> and
+      'myseqs.fasta.probs'.  Invoke the MAD (Multiple Alignment Display) GUI
+      as
+    <p><kbd>java -jar display/mad.jar myseqs.fasta</kbd>
+    <p>
+      Please be patient if it takes a while to load.
+    <p>
+      Characters in the multiple alignment are colored according to the 
+      probability that they are correctly aligned.
+
+    <p>
+      You can see what a typical FSA alignment looks like by running
+      on one of the provided example alignments, such as
+    <p><kbd>java -jar display/mad.jar examples/tRNA.aln1.fasta</kbd>
+
+    <p>
+      You can also use the GUI to compare a FSA alignment with another alignment,
+      such as one which you have edited by hand.  Invoke the GUI as
+    <p><kbd>java -jar display/mad.jar examples/tRNA.aln1.fasta myalignment.fa</kbd>
+      The alternate alignment <kbd>myalignment.mfa</kbd> must be in multi-FASTA format.
+
+
+
+      <h4><a name = "reliable">How do I see what parts of my alignment are the most reliable?</a></h4>
+      The accuracy estimates produced by FSA and the GUI are useful for
+      downstream analyses, for example allowing biologists to restrict
+      their analyses to the most reliable portions of the alignment
+      or edit unreliable parts of the alignment by hand.
+
+      The accuracy measures also allow you to visualize how FSA works.
+      If you switch to the "Specificity" coloring and watch the animation from the beginning,
+      you will see FSA first aligns characters whose homology it is most sure of (red),
+      and only later aligns characters of unclear homology (blue).
+      Similarly, you can visualize the sensitivity/specificity tradeoff: Near the beginning
+      of the alignment the specificity is very high, but the sensitivity is low.
+      The specificity decreases and the sensitivity increases as the alignment progresses.
+
+      The GUI displays five different accuracy measures for each position in the multiple alignment.
+      These are:
+      <ul>
+
+	<li type=square><u>Accuracy</u>: What characters or gaps of the multiple alignment are the most accurate?
+	  <blockquote>
+	    Accuracy is the per-character estimated Alignment Metric Accuracy,
+	    which measures the fidelity of both aligned characters and unaligned characters (gaps).
+	    It can be thought of as a single measure encompassing the sensitivity/specificity tradeoff.
+	  </blockquote>
+
+	<li type=square><u>Sensitivity</u>: What characters are aligned with the greatest sensitivity?
+	  <blockquote>
+	    Sensitivity is the estimated number of correctly-aligned character pairs divided by the
+	    true number of aligned character pairs.
+	    <br>
+	    Sensitivity is defined as the expectation of (True positives) / (True positives + False negatives).
+	    This definition is equivalent to <a href="http://en.wikipedia.org/wiki/Precision_and_recall">recall</a> as used in classification problems.
+	  </blockquote>
+
+	<li type=square><u>Specificity</u>: What characters are aligned with the greatest specificity?
+	  <blockquote>
+	    Specificity is the estimated fraction of character pairs which are aligned correctly.
+	    <br>
+	    Specificity is defined as the expectation of (True positives) / (True positives + False positives).
+	    This definition is equivalent to <a href="http://en.wikipedia.org/wiki/Precision_and_recall">precision</a> as used in classification problems.
+	    It is also frequently called <a href="http://en.wikipedia.org/wiki/Positive_predictive_value">Positive Predictive Value</a> in the literature.
+	  </blockquote>
+
+	<li type=square><u>Certainty</u>: Was there a better place to align this character?
+	  <blockquote>
+	    Certainty measures whether a character or gap is aligned correctly.
+	  </blockquote>
+	  
+	<li type=square><u>Consistency</u>: What parts of the multiple alignment are optimal on a pairwise level?
+	  <blockquote>
+	    Consistency measures the extent to which the posterior probabilities from pairwise comparisons
+	    are optimized by the multiple alignment.  If a multiple alignment is perfectly consistent,
+	    then each pairwise alignment implied by the multiple alignment corresponds perfectly to the pairwise alignment
+	    which you would obtain by aligning only those two sequences.
+	  </blockquote>
+
+      </ul>
+
+      <p>
+	Please see the manuscript for precise definitions of these reliability measures.
+
+      <p>
+	Notice that the accuracy scores tend to
+	decrease near gaps, reflecting the difficulty of precisely 
+	resolving gap boundaries.
+
+
+
+      <!-- Output formats and tools -->
+      <hr>
+      <h2>Output formats and tools</h2>
+
+      <h4><a name = "stockholm"> How do I parse Stockholm alignments?</a></h4>
+      Use the <kbd>--stockholm</kbd> output option to tell FSA 
+      to produce a Stockholm-format alignment.  The alignment is marked up with
+      a per-column accuracy annotation which is identical to the values
+      reported by the <a href="#gui">GUI</a>.
+
+      FSA includes tools for working with Stockholm alignments, such as
+      <kbd>prettify.pl</kbd> for making Stockholm-format alignments human-
+      readable, in the <var>perl/</var> directory.
+
+
+      <h4><a name = "comparealign"> How do I compare alignments?</a></h4>
+      The included script <kbd>cmpalign.pl</kbd> will compare two alignments
+      and report accuracies measures including Accuracy (AMA), Sensitivity and Specificity.
+      It can parse Stockholm, multi-FASTA, MSF and CLUSTAL format alignments.
+
+
+
+
+      <!-- Troubleshooting -->
+      <hr>
+      <h2>Troubleshooting</h2>
+
+      <h4><a name = "gui_memory"> I'm getting memory errors when using the GUI.</a></h4>
+      If you're getting errors which say something like
+    <p><kbd>Exception in thread ... java.lang.OutOfMemoryError: Java heap space</kbd>
+    <p>
+      then try increasing the memory allowed with with <kbd>-Xmx</kbd> option, ie
+    <p><kbd>java -Xmx256m jar display/mad.jar examples/tRNA.aln1.fasta</kbd>
+    <p>
+      You can increase it up to the maximum allowed by your machine.
+
+
+      <h4><a name = "malloc"> I get out-of-memory (bad alloc) errors when I try to align long sequences.</a></h4>
+      This occurs when FSA is unable to find good anchors between your sequences
+      to restrict the complexity of inference.  This can occur if you use the option
+      <kbd>--noanchored</kbd> to prevent anchoring, if your sequences are very diverged,
+      or if they have many simple repeats.  Use the <kbd>--maxram</kbd> option to
+      prevent FSA from attempting to perform exhaustive inference when it can't
+      find good anchors.  It will leave sequence for which it can't find 
+      sufficiently-good anchors unaligned.
+
+
+
+
+
+
+      <!-- More information -->
+      <hr>
+      <h2>More information</h2>
+
+      <h4><a name = "contact"> How do I contact you?</a></h4>
+      You can reach the FSA team at <a href="mailto:fsa@math.berkeley.edu">fsa@math.berkeley.edu</a> with any questions, feedback, etc.
+
+
+      <h4><a name = "citation"> How do I cite FSA?</a></h4>
+      Bradley RK, Roberts A, Smoot M, Juvekar S, Do J, Dewey C, Holmes I, Pachter L (2009) <a href="http://www.ploscompbiol.org/article/info%3Adoi%2F10.1371%2Fjournal.pcbi.1000392">Fast Statistical Alignment</a>. PLoS Computational Biology. 5:e1000392.
+      <p>The FSA manuscript can also be found in the <var>doc/</var>
+      directory of the FSA source code distribution.
+      
+
+      <h4><a name = "license">Under what license is FSA distributed?</a></h4>
+      FSA is licensed under version 3 of the <a href="http://www.gnu.org/licenses/gpl.html">GNU General Public License</a>.
+      Please see the files <var>LICENSE</var> and <var>COPYING</var> for further information.
+
+
+      <h4><a name = "git"> How do I become an FSA developer?</a></h4>
+      FSA is designed to be modular and there are many aspects of the program that can be improved;
+      we welcome your help! The code is under <a href="http://git.or.cz/">Git</a> version control.
+      Please contact us at <a href="mailto:fsa@math.berkeley.edu">fsa@math.berkeley.edu</a> for information.
+      The source code is set up for use with <a href="http://www.doxygen.org/">Doxygen</a>,
+      a system for automated building of documentation.
+
+      <h4><a name = "influences"> What other programs influenced the development of FSA?</a></h4>
+      Source code in <var>seq/</var> and <var>util/</var> is from Ian Holmes's DART library [1],
+      which is used for input and output routines.
+
+    <p>
+      FSA's DP code was generated by HMMoC by Gerton Lunter [2]. The
+      aligner example distributed with HMMoC, which implements a 
+      learning procedure for gap parameters, was an inspiration for FSA's
+      learning strategies. FSA's banding code is taken directly from the
+      aligner example.
+
+    <p>
+      The sequence annealing technique for constructing a multiple
+      alignment from pairwise comparisons was developed by Ariel Schwartz.
+      The implementation of sequence annealing in FSA is a modified version
+      of the original implementation in AMAP by Ariel Schwartz and Lior Pachter [3,4].
+
+    <p>
+      The anchor annealing approach used in FSA is modeled after the recursive
+      anchoring strategy used in MAVID by Nicolas Bray and Lior Pachter [5].
+
+    <p>
+      The MAD GUI interface to FSA was written by Adam Roberts based on a preliminary
+      version developed by Michael Smoot.
+
+    <p>
+      Please see:
+
+    <p>[1] I. Holmes and R. Durbin. <a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=pubmed&dopt=Abstract&list_uids=9773345">Dynamic Programming Alignment 	Accuracy</a>. Journal of Computational Biology. 1998, 5 (3):493-504.
+
+    <p>[2] G.A. Lunter. <a href="http://bioinformatics.oxfordjournals.org/cgi/content/abstract/23/18/2485">HMMoC - a Compiler for Hidden Markov Models</a>. Bioinformatics. 2007, 23       (18):2485-2487.
+
+    <p>[3] A.S. Schwartz. <a href="http://www.eecs.berkeley.edu/Pubs/TechRpts/2007/EECS-2007-39.html">Posterior Decoding Methods for Optimization and Control of Multiple 	Alignments</a>. Ph.D. Thesis, UC Berkeley. 2007.
+
+    <p>[4] A.S. Schwartz and L. Pachter. <a href="http://bioinformatics.oxfordjournals.org/cgi/content/abstract/23/2/e24?etoc">Multiple Alignment by Sequence Annealing</a>.       Bioinformatics. 2007, 23 (2):e24-e29.
+
+    <p>[5] N. Bray and L. Pachter. <a href="http://www.genome.org/cgi/content/abstract/14/4/693">MAVID: Constrained Ancestral Alignment of Multiple Sequences</a>. Genome Research. 2004, 14:693-699.
+
+      <hr>
+      <a href="http://sourceforge.net/projects/fsa"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=234783&type=15" width="150" height="40" border="0" alt="Get FSA at SourceForge.net. Fast, secure and Free Open Source software downloads" /></a>
+
+      <!-- Piwik -->
+      <script type="text/javascript">
+	var pkBaseURL = (("https:" == document.location.protocol) ? "https://apps.sourceforge.net/piwik/fsa/" : "http://apps.sourceforge.net/piwik/fsa/");
+	document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/javascript'%3E%3C/script%3E"));
+      </script><script type="text/javascript">
+	piwik_action_name = '';
+	piwik_idsite = 1;
+	piwik_url = pkBaseURL + "piwik.php";
+	piwik_log(piwik_action_name, piwik_idsite, piwik_url);
+      </script>
+      <object><noscript><p><img src="http://apps.sourceforge.net/piwik/fsa/piwik.php?idsite=1" alt="piwik"/></p></noscript></object>
+      <!-- End Piwik Tag -->
+
+  </BODY>
+</HTML>

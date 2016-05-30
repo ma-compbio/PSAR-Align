@@ -1,0 +1,16 @@
+# [REQUIRED] Parameter for the nucleotide substitutions
+SUBSTPAR=0.6
+
+# [REQUIRED] Nucleotide background probabilities
+PA=0.3
+PC=0.2
+PG=0.2
+PT=0.3
+
+# [OPTIONAL]State transition probabilities for states, M, IS, and IA
+#MtoIS=0.02
+#MtoIA=0.02
+#IStoIS=0.8
+#IAtoIA=0.8
+#IAtoIS=0.00001
+#IStoIA=0.00001

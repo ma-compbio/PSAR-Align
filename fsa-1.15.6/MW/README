@@ -1,0 +1,15 @@
+$Id: README,v 1.2 2004/04/05 19:54:19 linderot Exp $
+
+For how to build MW, please read INSTALL;
+
+To run the existing examples, go to examples/ directory, and try 
+    the fib, matmul or n-queen. There is also a skel subdirectory
+    that contains skeleton files to build your own simple MW app;
+
+For how to write your MW applications, please read matmul.html 
+    in examples/matmul directory; 
+
+For details of MW API, please refer to the DOC++ files in doc 
+    directory;
+
+For other information, please email to mw@cs.wisc.edu. 

@@ -1,0 +1,268 @@
+<<<<<<<dnl Caching is usually WRONG for systems with cross-mounted file systems
+dnl (the cache file may correspond to a different system).  Since configure
+dnl is not on a performance-critical path, go for robustness over speed.
+dnl
+
+define([AC_CACHE_LOAD], )dnl
+define([AC_CACHE_SAVE], )dnl
+
+dnl Process this file with autoconf to produce a configure script.
+AC_INIT(src/MWDriver.h)
+
+PACKAGE=mw
+VERSION=0.3.0
+
+AC_SUBST(PACKAGE)
+AC_SUBST(VERSION)
+
+dnl Check for the autoconf version
+AC_PREREQ(2.13)
+	
+dnl Set the header
+dnl AM_CONFIG_HEADER(config.h)
+
+AC_ARG_PROGRAM
+
+dnl Checks for programs.
+AC_PROG_CXX
+AC_PROG_INSTALL
+AC_PROG_MAKE_SET
+AC_PROG_RANLIB
+AC_PATH_PROG(CXX,g++)
+AC_PATH_PROG(AUTOCONF,autoconf)
+
+AC_SUBST(CXX)
+AC_SUBST(AUTOCONF)
+
+dnl Checks for libraries.
+dnl We're just build libraries now, so you shouldn't 
+dnl need to check all these until you build the exec
+
+dnl Checks for header files.
+AC_HEADER_STDC
+AC_CHECK_HEADERS(fcntl.h limits.h sys/time.h unistd.h)
+
+dnl Checks for typedefs, structures, and compiler characteristics.
+AC_C_CONST
+AC_HEADER_TIME
+AC_STRUCT_TM
+AC_TYPE_UID_T
+
+dnl Checks for library functions.
+AC_FUNC_VPRINTF
+AC_CHECK_FUNCS(getcwd gethostname gettimeofday mkdir strstr)
+
+dnl
+dnl Starting here are Jeff's (non-auto) additions
+dnl
+
+dnl Some C++ support macros
+AC_CXX_DYNAMIC_CAST
+
+dnl Jeff's check for condor
+AC_ARG_WITH(condor, [  --with-condor           Use the given condor installation path --without-condor means only build indp], CONDOR_DIR=$withval)
+if test -z "$CONDOR_DIR"; then
+        AC_PATH_PROG(JUNK1, condor_status)
+        if test -z "$JUNK1"; then
+                echo "-- Can't build MW without Condor, please install Condor first."
+		exit 1        
+	else
+                JUNK2=`dirname $JUNK1`
+		dnl -- better if we can report condor versioni, will add later.
+                CONDOR_DIR=`dirname $JUNK2`  
+                echo "-- Using Condor installed in $CONDOR_DIR"
+                AC_SUBST(CONDOR_DIR)
+        fi
+else 
+	echo "-- Using Condor installed in $CONDOR_DIR"
+fi
+AC_DEFINE_UNQUOTED(CONDOR_DIR, "$CONDOR_DIR", [condor release directory])
+
+dnl Check for mw-file RMCOMM usage
+AC_ARG_WITH(mwfile, [  --with-mwfile				Use MWfile RMCOMM], USE_MWFILE=$withval, USE_MWFILE=no)
+if test -z $USE_MWFILE
+then
+	USE_MWFILE=true
+	echo "-- configuring MW to use MW-FILE RMCOMM Layer"
+else
+	if test $USE_MWFILE = no
+	then
+			USE_MWFILE=no
+			echo "-- configuring MW not to use MW-FILE RMCOMM Layer"
+	else 
+			USE_MWFILE=true
+			echo "-- configuring MW to use MW-FILE RMCOMM Layer"
+	fi
+fi
+
+
+machtype=`uname -m`
+case $machtype in
+	x86_64)
+		echo "On x86_64, forcing mwfile implementation off"
+		USE_MWFILE=no
+	;;
+esac
+AC_SUBST(USE_MWFILE)
+
+dnl Check for chirp-file support
+AC_ARG_WITH(chirp, [  --with-chirp              Use chirp for mw-file on clipped platforms], USE_CHIRP=$withval)
+
+if test -z $USE_CHIRP 
+then
+echo "-- Not using chirp with MW-File"
+else
+echo "-- Using chirp with MW-File"
+AC_DEFINE(USE_CHIRP)
+AC_SUBST(USE_CHIRP)
+fi
+
+
+dnl Jeff's check for (Condor) PVM
+dnl  -- Probably this should check if it really is 
+dnl     a Condor PVM library, or just a PVM library
+AC_ARG_WITH(pvm-arch, [  --with-pvm-arch              Use the given pvm architectures], PVM_ARCH=$withval)
+AC_ARG_WITH(pvm, [  --with-pvm              Use the given pvm installation path], PVM_ROOT=$withval, PVM_ROOT=no)
+if test -z "$PVM_ROOT"; then
+        AC_PATH_PROG(JUNK3, pvm)
+        if test -z "$JUNK3"; then
+                echo "-- Can't build MW without PVM, please install CondorPvm first."
+		exit 1
+        else
+                JUNK4=`dirname $JUNK3`
+                PVM_ROOT=`dirname $JUNK4`/
+                echo "-- Using PVM lib installed in $PVM_ROOT/lib/$PVM_ARCH"
+                AC_SUBST(PVM_ROOT)
+                AC_SUBST(PVM_ARCH)
+        fi
+else 
+        if test $PVM_ROOT = no
+	then
+	   echo "-- Not using PVM"
+	else
+           echo "-- Using PVM lib installed in $PVM_ROOT/lib/$PVM_ARCH"
+	fi
+fi
+
+dnl Some rudimentary stuff to setup for MPI build if required
+AC_MSG_CHECKING([for mpi-directory])
+AC_ARG_WITH(mpi, [  --with-mpi              Build the Static MPI RMComm], USE_MPI=$withval, USE_MPI=no)
+if test -z $USE_MPI
+then
+dnl Check if it is setup
+    AC_PATH_PROG(JUNK5, mpicxx) 
+    if test -z "$JUNK5"; then
+       echo "-- Can't find mpicxx, please install mpi first."
+       exit 1
+    else
+	echo "-- MPI is set to $USE_MPI"
+	echo "-- Using MPI lib $JUNK5"
+	MPICXX=mpicxx
+	AC_SUBST(MPICXX)
+	echo "-- The MPI Compiler MPICXX is set at $MPICXX"
+    fi
+    else
+    if test $USE_MPI = no
+    then
+        echo "-- Not using MPI"
+    else
+        MPICXX=mpicxx
+	AC_SUBST(MPICXX)
+	echo "-- The MPI Compiler MPICXX is set at $MPICXX" 
+    fi
+fi
+
+
+dnl Check for System and Socket	
+if opsys=`uname -s`
+then
+	echo "-- Operating system is $opsys"
+else
+	echo "-- Can't find the 'uname' program!"
+	exit 1
+fi
+
+case $opsys in
+    SunOS*)
+		SOCKET_LIB="-lnsl -lsocket " ;;
+	*)
+		SOCKET_LIB= ;;
+esac
+AC_SUBST(SOCKET_LIB)
+
+if test $opsys = "Linux" 
+then
+		echo "-- Using poll instead of select for supporting > 1024 socket workers"
+		AC_DEFINE(USE_POLL)
+		AC_SUBST(USE_POLL)
+fi
+
+dnl Check for NWS library
+dnl if nwspresence=`nm $CONDOR_DIR/lib/libcondorsyscall.a | grep callBack`
+dnl then
+dnl 	echo "-- You have fork capable condor_compile version, will check NWS."
+dnl	AC_PATH_PROG(NWS_SENSOR_PING, nws_ping)
+dnl	if test -z "$NWS_SENSOR_PING"; then
+dnl		USE_NWS=no
+dnl	else 
+dnl		USE_NWS=yes
+dnl	fi
+dnl else
+dnl	echo "-- You don't have fork capable condor_compile version, won't use NWS."
+dnl	USE_NWS=no
+dnl fi
+
+dnl Jeff changed to NOT use nws -- ever (and thus print no warning message)
+USE_NWS=no
+
+case $USE_NWS in 
+	yes*)
+		MISC_DEFN=-DNWSENABLED;
+		NWS_SENSOR_PATH=`dirname $NWS_SENSOR_PING`
+		NWS_PATH=`dirname $NWS_SENSOR_PATH`
+		MISC_LIB=$NWS_PATH/libnws
+		;;
+	*)
+		MISC_DEFN=
+		MISC_LIB=-lNWS;
+		;;
+esac
+
+AC_SUBST(MISC_DEFN)
+AC_SUBST(MISC_LIB)
+
+dnl Whether to support runtime measurement (ifdef MEASURE)
+AC_ARG_WITH(measure, [  --with-measure          Build with -DMEASURE], MEASURE_DEFN='-DMEASURE')
+AC_SUBST(MEASURE_DEFN)
+
+dnl Check for --with-independent
+dnl AC_ARG_WITH(independent, [  --with-independent      Build MW-Independent library], 
+dnl 	ENABLE_MWINDEPENDENT=yes)
+dnl We now always build independent
+ENABLE_MWINDEPENDENT=yes
+AC_SUBST(ENABLE_MWINDEPENDENT)
+
+dnl Define the MW_LIBDIR 
+MW_LIBDIR=`pwd`/lib
+AC_SUBST(MW_LIBDIR)
+MW_LIBDIR_DEBUG=`pwd`/debug_lib
+AC_SUBST(MW_LIBDIR_DEBUG)
+
+if test -d lib; then
+	echo "-- The lib directory already exists, no need to create"
+else
+	echo "-- Creating lib directory"
+	mkdir lib
+fi
+
+if test -d debug_lib; then
+	echo "-- The debug_lib directory already exists, no need to create"
+else
+	echo "-- Creating debug_lib directory"
+	mkdir debug_lib
+fi
+
+dnl Generate output files
+EXTRA_MAKEFILES=`echo "src/RMComm/MW-Independent/Makefile"`
+dnl AC_OUTPUT(Makefile src/Makefile src/RMComm/Makefile src/RMComm/MW-File/Makefile src/RMComm/MW-CondorPVM/Makefile src/RMComm/MW-Socket/Makefile src/RMComm/MW-StaticMPI/Makefile src/MWControlTasks/Makefile src/BlackBox/Makefile examples/Makefile examples/fib/Makefile examples/n-queens/Makefile examples/matmul/Makefile $EXTRA_MAKEFILES, echo timestamp > stamp-h )
+AC_OUTPUT(Makefile src/Makefile src/RMComm/Makefile src/RMComm/MW-File/Makefile src/RMComm/MW-CondorPVM/Makefile src/RMComm/MW-Socket/Makefile src/RMComm/MW-StaticMPI/Makefile src/MWControlTasks/Makefile src/BlackBox/Makefile $EXTRA_MAKEFILES, echo timestamp > stamp-h )

@@ -1,0 +1,348 @@
+
+==================================================================
+                        FSA
+
+        Distance-based multiple sequence alignment
+==================================================================
+
+FSA is a probabilistic multiple sequence alignment algorithm which uses
+a "distance-based" approach to aligning homologous protein, RNA or DNA
+sequences.  Much as distance-based phylogenetic reconstruction methods
+like Neighbor-Joining build a phylogeny using only pairwise divergence
+estimates, FSA builds a multiple alignment using only pairwise
+estimations of homology.  This is made possible by the sequence
+annealing technique for constructing a multiple alignment from pairwise
+comparisons, developed by Ariel Schwartz in
+"Posterior Decoding Methods for Optimization and Control of Multiple
+Alignments." Ph.D. Thesis, UC Berkeley. 2007.
+
+FSA brings the high accuracies previously available only for small-scale 
+analyses of proteins or RNAs to large-scale problems such as aligning 
+thousands of sequences or megabase-long sequences.  FSA introduces
+several novel methods for constructing better alignments:
+
+  * FSA uses machine-learning techniques to estimate gap and
+    substitution parameters on the fly for each set of input sequences.
+    This "query-specific learning" alignment method makes FSA very robust: it
+    can produce superior alignments of sets of homologous sequences
+    which are subject to very different evolutionary constraints.
+
+  * FSA is capable of aligning hundreds or even thousands of sequences
+    using a randomized inference algorithm to reduce the computational
+    cost of multiple alignment.  This randomized inference can be over
+    ten times faster than a direct approach with little loss of
+    accuracy.
+
+  * FSA can quickly align very long sequences using the "anchor
+    annealing" technique for resolving anchors and projecting them with
+    transitive anchoring.  It then stitches together the alignment
+    between the anchors using the methods described above.
+
+  * The included GUI, MAD (Multiple Alignment Display), can display
+    the intermediate alignments produced by FSA, where each character
+    is colored according to the probability that it is correctly
+    aligned.
+
+FSA was created by Robert Bradley. It was developed by Robert Bradley,
+Colin Dewey, Jaeyoung Do, Sudeep Juvekar, Lior Pachter, Adam Roberts,
+and Michael Smoot, along with assistance from many other people.
+All have made intellectual contributions and contributed code.
+
+Please contact us at fsa@math.berkeley.edu with any questions, feedback, etc.
+
+If you use FSA, please cite:
+Bradley RK, Roberts A, Smoot M, Juvekar S, Do J, Dewey C, Holmes I, Pachter L (2009) Fast Statistical Alignment. PLoS Computational Biology. 5:e1000392.
+(This manuscript can be found in the doc/ directory.)
+
+
+==================================================================
+
+                   INSTALLATION
+
+FSA is built and installed by running the following commands:
+
+./configure
+make
+make install
+
+If you wish to install the fsa files in a location other than your
+system's standard directories (which usually requires root permissions),
+specify the top-level installation directory with the --prefix option to
+configure.  For example,
+
+./configure --prefix=$HOME
+
+specifies that binaries should be installed in $HOME/bin, libraries in
+$HOME/lib, etc..
+
+If you wish to align long sequences, then you must install MUMmer,
+which FSA calls to get candidate anchors between sequences.
+You can download MUMmer from http://mummer.sourceforge.net/.
+When running configure, you must either have the mummer executable in your path
+or specify the executable with the --with-mummer option to configure, e.g.
+
+./configure --with-mummer=/usr/local/MUMmer3.20/mummer
+
+if it is located at /usr/local/MUMmer3.20/mummer.
+
+FSA can also call exonerate to detect remote homology.
+You can download exonerate from http://www.ebi.ac.uk/~guy/exonerate/.
+When running configure, you must either have the exonerate executable in your path
+or specify the executable with the --with-exonerate option to configure, e.g.
+
+./configure --with-exonerate=/usr/local/bin/exonerate
+
+if it is located at /usr/local/bin/exonerate.
+
+
+==================================================================
+
+                      USAGE
+
+FSA accepts FASTA-format input files and outputs multi-FASTA
+alignments by default.  The most basic usage is:
+  fsa <mysequences.fa> >myalignedsequences.mfa
+or
+  fsa --stockholm <mysequences.fa> >myalignedsequences.stk
+
+Many options are provided.  Please see html/FAQ.html for more information.
+
+
+==================================================================
+
+                    REFERENCES
+
+Source code in 'seq/' and 'util/' is from Ian Holmes's DART library, 
+which is used for input and output routines.
+
+FSA's DP code was generated by HMMoC by Gerton Lunter. The
+'aligner' example distributed with HMMoC, which implements a 
+learning procedure for gap parameters, was an inspiration for FSA's
+learning strategies. FSA's banding code is taken directly from the
+'aligner' example.
+
+The sequence annealing technique for constructing a multiple
+alignment from pairwise comparisons was developed by Ariel Schwartz.
+The implementation of sequence annealing in FSA is based on
+the original implementation in AMAP by Ariel Schwartz and Lior Pachter.
+
+The anchor annealing approach used in FSA is modeled after the recursive
+anchoring strategy used in MAVID by Nicolas Bray and Lior Pachter.
+
+The MAD GUI interface to FSA was written by Adam Roberts based on
+a preliminary version by Michael Smoot.
+
+Please see:
+
+I. Holmes and R. Durbin. "Dynamic Programming Alignment Accuracy." Journal of Computational Biology. 1998, 5 (3):493-504.
+G.A. Lunter. "HMMoC - a Compiler for Hidden Markov Models." Bioinformatics. 2007, 23 (18):2485-2487.
+A.S. Schwartz. "Posterior Decoding Methods for Optimization and Control of Multiple Alignments." Ph.D. Thesis, UC Berkeley. 2007.
+A.S. Schwartz and L. Pachter. "Multiple Alignment by Sequence Annealing." Bioinformatics. 2007, 23 (2):e24-e29.
+N. Bray and L. Pachter "MAVID: Constrained Ancestral Alignment of Multiple Sequences." Genome Research. 2004, 14:693-699.
+
+
+==================================================================
+
+                        COPYRIGHT
+
+Copyright (C) 2008. The Regents of the University of California (Regents).
+All Rights Reserved.  Permission to use, copy, modify, and distribute this software
+and its documentation for educational, research, and not-for-profit purposes,
+without fee and without a signed licensing agreement, is hereby granted,
+provided that the above copyright notice, this paragraph and the following two paragraphs
+appear in all copies, modifications, and distributions.
+Contact
+The Office of Technology Licensing, UC Berkeley, 2150 Shattuck Avenue,
+Suite 510, Berkeley, CA 94720-1620, (510) 643-7201
+for commercial licensing opportunities.
+Created by
+Robert K. Bradley, Departments of Math and Molecular and Cell Biology,
+University of California, Berkeley.
+
+IN NO EVENT SHALL REGENTS BE LIABLE TO ANY PARTY FOR
+DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES,
+INCLUDING LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE
+AND ITS DOCUMENTATION, EVEN IF REGENTS HAS BEEN ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGE.
+
+REGENTS SPECIFICALLY DISCLAIMS ANY WARRANTIES, INCLUDING,
+BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY
+AND FITNESS FOR A PARTICULAR PURPOSE. THE SOFTWARE AND
+ACCOMPANYING DOCUMENTATION, IF ANY, PROVIDED HEREUNDER IS PROVIDED "AS IS".
+REGENTS HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT,
+UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
+
+
+==================================================================
+
+                        LICENSE
+
+
+Please see the file LICENSE distributed with FSA.
+
+
+FSA is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 3 of the License, or
+(at your option) any later version.
+
+FSA is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with FSA; if not, write to the Free Software Foundation, Inc.,
+51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+
+==================================================================
+
+                    VERSION HISTORY
+
+1.01, 7/10/2008
+  -- Initial import to Git (Robert Bradley)
+
+1.02, 7/21/08
+  -- Faster anchor annealing (Robert Bradley)
+  -- GUI added to package (Adam Roberts)
+
+1.03, 7/25/08
+  -- Improved GUI features (Adam Roberts)
+
+1.04, 7/28/08
+  -- Moved to autotools (Colin Dewey)
+
+1.05, 8/21/08
+  -- Optional anchor annealing in protein space (Robert Bradley)
+  -- Reduced GUI memory usage (Adam Roberts)
+  -- Many accuracy measures for GUI (Adam Roberts and Robert Bradley)
+
+1.06, 8/29/08
+  -- Homology no longer forced at anchor boundaries (Robert Bradley)
+  -- Scripts for evaluating alignment accuracies according to FSA's model (Robert Bradley)
+
+1.07, 9/2/08
+  -- GUI bugfix for displaying extremely certain alignments (Robert Bradley)
+      (Alignment inference is unaffected.)
+
+1.08, 9/15/08
+  -- Miscellaneous compilation fixes (Robert Bradley)
+  -- Fix for learning on highly-conserved alignments (Robert Bradley)
+
+1.09, 10/22/08
+  -- Much faster sequence annealing (Robert Bradley, Colin Dewey & Lior Pachter)
+  -- Better memory usage for long sequences (Robert Bradley)
+  -- Optional Mercator constraints (Robert Bradley and Colin Dewey)
+  -- Optional anchoring with exonerate (Robert Bradley)
+  -- GUI can export TIFF images (Robert Bradley)
+  -- gapcleaner fix (Robert Bradley)
+  -- Parallelization mode (Jaeyoung Do and Colin Dewey)
+  -- Database mode (Jaeyoung Do and Colin Dewey)
+  -- Added submitted manuscript as manual.
+
+(The below versions are labeled as "major.minor.bugfix")
+
+1.10.0, 10/30/08
+  -- --nucprot option and utility programs translate and prot2codon (Robert Bradley & Colin Dewey)
+  -- Bugfixes for anchoring with both Mercator & exonerate (Robert Bradley & Colin Dewey)
+  -- Bugfixes for parallelization & database modes (Jaeyoung Do & Colin Dewey)
+
+1.11.0, 11/11/08
+  -- housekeeping tasks (Robert Bradley):
+       - gaps stripped from input sequences
+       - error thrown if 2 alignable sequence are left unaligned due to RAM constraints
+  -- hardmasked sequence is left unaligned by default (Robert Bradley)
+
+1.11.1, 11/13/08
+  -- Bugfixes for anchoring with both Mercator & exonerate (Robert Bradley & Colin Dewey)
+  -- Compilation fixes for g++ 4.4 (Robert Bradley)
+
+1.11.2, 11/14/08
+  -- Bugfix for GUI compilation (Colin Dewey)
+
+1.12.0, 11/22/08
+  -- Perl scripts to interact with FSA-Mercator
+     whole-genome alignments (Robert Bradley & Colin Dewey)
+  -- Switch to using only ungapped exonerate anchors (Robert Bradley & Colin Dewey)
+
+1.12.1, 11/27/08
+  -- Source code documentation updated for Doxygen compatibility (Robert Bradley)
+
+1.13.0, 1/9/09
+  -- C++ tools for working with FSA-Mercator whole-genome alignments (Robert Bradley & Colin Dewey)
+     (Note that the deprecated Perl scripts had a serious bug for - strand extraction!)
+  -- Bugfix for softmasking with exonerate (Robert Bradley & Colin Dewey)
+  -- Completely re-written sequence and alignment representation code (Robert Bradley)
+  -- Use a model with 2 sets, rather than 1 set, of indel states by default
+  -- Turn iterative refinement on by default with an unlimited number of steps
+
+1.13.1, 1/9/09
+  -- Bugfix and better automated options for --nucprot (Robert Bradley)
+
+1.13.2, 1/12/09
+  -- Compilation fixes for g++ 4.4 (Robert Bradley)
+
+1.13.3, 1/14/09
+  -- Bugfix for alphabet case-sensitivity during learning (Robert Bradley)
+
+1.13.4, 2/6/09
+  -- Bugfix for % ID calculation for sliced alignments (Robert Bradley)
+  -- More intuitive default anchoring options (Colin Dewey)
+  -- Bugfix for hardmasked error after compilation without MUMmer on OS X 10.4 (Robert Bradley)
+
+1.14.0, 3/11/09
+  -- Added experimental --tree-weights option (Robert Bradley)
+  -- Added experimental --load-probs option (Robert Bradley)
+  -- Changed default behavior when two sequences have no detectable homology; see new option --require-homology (Robert Bradley)
+  -- New utility program slice_fasta to extract subsequences from FASTA files (Robert Bradley).
+
+1.14.1, 3/20/09
+  -- Changed Mercator-related short options to use upper-case letters (Robert Bradley).
+  -- Mercator slicing stuff now assumes a + strand if strand is unspecified; previously implicitly assumed - (Robert Bradley)
+  -- Tiny bugfix for map_gff_coords: --force-entry was accidentally on by default (Robert Bradley)
+  -- Bugfix for GUI compilation on Linux (Colin Dewey)
+
+1.14.2, 3/23/09
+  -- Updated FSA preprint (Robert Bradley).
+
+1.14.3, 3/31/09
+  -- Bugfix for recognizing DNA sequences with a lot of hardmasked sequence as protein (Robert Bradley)
+
+1.14.4, 4/2/09
+  -- Compilation bugfixes for some Linux systems where floor isn't declared (Robert Bradley)
+  -- Added FSA preprint accepted by PLoS Computational Biology (Robert Bradley)
+
+1.14.5, 4/14/09
+  -- Handle "NA" fields in Mercator maps (Robert Bradley)
+  -- Bugfix for automatic available RAM detection for some Linux distributions (Colin Dewey)
+  -- Parallelization and database modes are disabled by default (Colin Dewey)
+  -- Bugfix for strange behavior where all sequences are left unaligned under some older compilers (Colin Dewey)
+
+1.15.0, 6/12/09
+  -- Options to use k-mer similarities to choose sequence pairs for alignment, rather than just randomly (Robert Bradley & Colin Dewey)
+     * New options include --mst-min, --mst-max, --mst-palm, --degree and --kmer.
+     * Deprecated --training-number and --training-fraction options.
+  -- Memory usage in --maxsn mode reduced by ~2X (Robert Bradley & Colin Dewey)
+     The above two changes result in significantly-better large (> 100 sequences) alignments.
+  -- New program slice_fasta_gff (Robert Bradley)
+  -- Compiler flags for 64-bit systems to ensure that all available RAM is used if requested (Robert Bradley)
+  -- Published manuscript (http://www.ploscompbiol.org/article/info:doi/10.1371/journal.pcbi.1000392) included in doc/
+  -- Bugfix for automatic setting of --maxram for available RAM assessment (Colin Dewey)
+
+1.15.1, 7/15/09
+  -- Refactored alignment code to speed up the FSA-Mercator tools (Robert Bradley)
+
+1.15.2, 7/16/09
+  -- Minor compilation fix for g++ 4.1.2 (Robert Bradley)
+
+1.15.3, 10/14/09
+  -- Minor bugfix for running in --anchored --translated mode (Robert Bradley)
+
+1.15.4, 8/5/09
+  -- Minor bugfix for Mercator constraints which are all Ns in one species (Robert Bradley)
+
+1.15.5, 8/10/09
+  -- Use tr1/unordered_set for annealing if available (Robert Bradley)
+
+1.15.6, 6/22/11
+  -- Minor compilation fix for gcc 4.5.2 (Robert Bradley)

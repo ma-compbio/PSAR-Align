@@ -1,0 +1,43 @@
+
+     PSAR (Probabilistic Sampling-based Alignment Reliability) Score
+     ===============================================================
+
+1. How to compile?
+------------------
+	
+	You just need to type: make
+
+2. How to run?
+--------------
+	
+	psar <alignment fasta file> <parameter file> <output directory> [-s <sampling threshold>] [-p]
+
+	- Alignment fasta file: input alignment file in FASTA format
+
+	- Parameter file: additional parameters 
+	
+	- Output directory: directory for storing sampled alignments
+	
+	- -s <Sampling threshold> (optional)
+		- Parameter to control the degree of sampling
+		- Should be in range [0,1]
+		- Lower value produces alignment samples more close to 
+				the optimal alignment
+		- Default value is 0.6.
+	
+	- -p: Print estimated parameters (optional)
+
+	Example: ./psar example/test.fa example/parameters.txt example/test
+
+3. What are produced?
+---------------------
+
+	PSAR_pair.txt: PSAR pair scores
+	PSAR_column.txt: PSAR column scores
+ 
+	Sampled alignments are stored in the given output directory.
+
+4. How to ask questions?
+------------------------
+
+	Contact Jaebum Kim (jkim63@illinois.edu)	

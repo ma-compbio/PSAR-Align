@@ -1,0 +1,36 @@
+
+Guide to sequence and alignment files:
+.fasta file is the unaligned sequences
+.reference.{mfa,stock} is the reference alignment
+.{mfa,stock} is the alignment produced by FSA run with the options
+	      --noindel2 (for only 1 set of indel states)
+	      --refinement 0 (for no iterative refinement)
+
+Origins of sequence and alignment files in example/:
+
+****************************
+BRalibaseII:
+****************************
+
+tRNA.aln1
+U5.aln1
+
+References:
+1. Gardner PP, Wilm A & Washietl S (2005) A benchmark of multiple sequence alignment programs upon structural RNAs. Nucleic Acids Research. 33(8):2433-2439.Supp. Mat.
+
+
+****************************
+Balibase:
+****************************
+
+RV12.BBS12030
+
+References:
+1. Thompson JD, Plewniak F, Poch O. BAliBASE: a benchmark alignment database for the evaluation of multiple alignment programs.
+Bioinformatics. 1999 Jan;15(1):87-8. 
+
+2. Thompson JD, Plewniak F, Poch O. A comprehensive comparison of multiple sequence alignment programs.
+Nucleic Acids Res. 1999 Jul 1;27(13):2682-90
+
+3. Bahr A, Thompson JD, Thierry JC, Poch O. BAliBASE (Benchmark Alignment dataBASE): enhancements for repeats, transmembrane sequences and circular permutations.
+Nucleic Acids Res. 2001 Jan 1;29(1):323-6.

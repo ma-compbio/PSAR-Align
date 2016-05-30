@@ -1,0 +1,55 @@
+#$Id: INSTALL,v 1.3 2004/05/28 18:35:47 linderot Exp $
+
+# ------------- Prepare to install MW -----------------------
+1) Install Condor first, and make sure that the condor execs
+   are in your path. For example, you can add the following 
+   lines in your .cshrc file. 
+
+	set path = ( $path /unsup/condor/bin )
+	set path = ( $path /unsup/condor/sbin )
+
+   For bash and other sh type shells, the command would be
+	export PATH = $PATH:/unsup/condor/bin:/unsup/condor/sbin	
+
+2) Install Condor-PVM or PVM with proper changes (refer the 
+   README.Condor-PVM file under /afs/cs.wisc.edu/p/condor/workspaces/pvm) 
+   so that it works with Condor. Also update your environment variables:
+	setenv PVM_ROOT  /p/condor/workspaces/pvm/pvm3.4.2
+	setenv PVM_ARCH  <proper_name: LINUX X86SOL2 SGI6 etc>
+
+	sh style shells
+
+	export PVM_ROOT=/p/condor/workspaces/pvm/pvm3.4.2
+	export PVM_ARCH=LINUX
+
+3) There are several options for debugging: 
+   -- The default result of "make check" will produce master and worker
+      application using MW-Independent (which is developed for debugging).
+      You can "setenv MW_DEBUG no" to turn this off.
+   -- You can also use Insure to detect memory related bugs. To do this, 
+      you need to "setenv DEBUG_BUILD insure" and setup the path variable.
+      As insure doesn't work with MW-File, this setting will produce 
+      master and worker app using MW-File. 
+
+
+# -------------- How to build MW -----------------------------
+tar zxf mw.tar.gz
+cd mw; ./configure #--prefix=/tmp/mw
+make; make check 	# The typical command to build MW
+
+  --with-condor           Use the given condor installation path
+  --with-pvm              Use the given pvm installation path
+  --with-measure          Build with -DMEASURE
+  --with-independent      Build MW-Independent library
+
+
+# -------------- Other targets --------------------------------
+make 		# Build MW libraries, without installing them
+make install 	# (Build and) install MW libraries
+make check	# Build examples (after building libraries)
+make clean	# Cleanup the exes, libs, and object files
+make distclean  # Cleanup for distribution
+
+# ------------- How to run the examples ----------------------
+cd examples/fib
+condor_submit submit_mwfile	# submit the job using MW File

@@ -1,0 +1,23 @@
+memcheck.o memcheck.o: memcheck.cc ../../config.h memcheck.h \
+  /usr/include/sys/sysinfo.h /usr/include/features.h \
+  /usr/include/sys/cdefs.h /usr/include/bits/wordsize.h \
+  /usr/include/gnu/stubs.h /usr/include/gnu/stubs-64.h \
+  /usr/include/linux/kernel.h
+
+../../config.h:
+
+memcheck.h:
+
+/usr/include/sys/sysinfo.h:
+
+/usr/include/features.h:
+
+/usr/include/sys/cdefs.h:
+
+/usr/include/bits/wordsize.h:
+
+/usr/include/gnu/stubs.h:
+
+/usr/include/gnu/stubs-64.h:
+
+/usr/include/linux/kernel.h:

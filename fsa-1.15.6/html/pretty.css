@@ -1,0 +1,12 @@
+body{margin:10px 10px 10px 10px;font-family:times;background-color:#FFFFF9;}
+
+a{text-decoration:none;}
+
+a:link{font-weight:bold; color:#000066;}
+
+a:visited{color:#000099; font-weight:bold;}
+
+a:hover{text-decoration:underline;}
+
+a:active{text-decoration:underline;}
+

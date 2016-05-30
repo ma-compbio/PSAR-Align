@@ -1,0 +1,43 @@
+
+     PSARAlign
+     =========
+
+1. How to compile?
+------------------
+	
+	You just need to type: make
+
+2. Requirement
+--------------
+
+	Perl should be installed in your system (http://www.perl.org/get.html)
+
+2. How to run?
+--------------
+	
+	PSARAlign.pl <alignment fasta file> <parameter file> <output directory>
+
+	- Alignment fasta file: input alignment file in FASTA format
+
+	- Parameter file: additional parameters for the PSAR program 
+	
+	- Output directory: directory for storing output 
+	
+	Example: ./PSARAlign.pl example/test.fa example/parameters.txt myout 
+
+3. What are produced?
+---------------------
+
+	- revised.aln.fa: revised alignment by PSARAlign
+	
+	- PSAR_pair.txt: PSAR pair scores
+	
+	- PSAR_column.txt: PSAR column scores
+ 
+	- Sampled alignments will be stored in a "samples" subdirectory 
+	in the given output directory.
+
+4. How to ask questions?
+------------------------
+
+	Contact Jaebum Kim (jbkim@konkuk.ac.kr)	
